@@ -23,20 +23,29 @@
         <div class ="row" id="mainrow">
             <div class="col-md-4">
                 <h3>Search for a City:</h3>
-                <input class= "input"> </input>
+                <input class= "input mt-1"> </input>
                 <button id="searchBtn" class="btn btn-info"><i class="fa fa-search" aria-hidden="true"></i>
                 </button>
+                <div class="card mt-4"></div>
 
             </div>
 
             <div class="col-md-8">
                 <section>
-                    <h2> City Name Test <span class="date">6/15</span></h2>
+                    <div class="card m-2">
+                        <h2 class="currentcity m-4"> City Name Test <span class="date">6/15</span>  <i class="fa fa-search weatherIcon"></i></h2> 
+                        <p class="current ml-4" id="ctemp">temp test</p>
+                        <p class="current ml-4" id="chumid">humid test</p>
+                        <p class="current ml-4" id="cwind">speed</p>
+                        <p class="current ml-4" id="cuv">uv </p>
+                    </div class="card">
+                    
                 </section> <!-- end of current day section-->
 
-                <secttion>
+                <section>
+                    
 
-                </secttion> <!-- end of future section -->
+                </section> <!-- end of future section -->
 
             </div>
 
