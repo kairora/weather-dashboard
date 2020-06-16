@@ -2,12 +2,37 @@ body {
     margin: 0;
 }
 
-header h1 {
+
+
+#mainrow {
+    margin: 10px 15px;
+}
+
+#heading {
     background-color: rgb(22, 21, 21);
+}
+
+header h1 {
+    font-family: 'Rubik', sans-serif;
     color: white;
     margin: 0;
     align-items: center;
     height: 8vh;
     display: flex;
     justify-content: center;
+}
+h3 {
+    font-family: 'Rubik', sans-serif;
+    font-size: 25px;
+}
+.input {
+    height: 3.5vh;
+    width: 15vw;
+}
+
+#searchBtn {
+    height: 40px;
+    width: 45px;
+    
+
 }
