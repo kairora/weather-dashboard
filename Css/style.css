@@ -2,7 +2,7 @@ body {
     margin: 0;  
 }
 
-body, p, h1, h2, h3 {
+body, p, h1, h2, h3, li {
     font-family: 'Rubik', sans-serif;
 }
 
@@ -38,6 +38,14 @@ h2, h3, h4 {
 }
 
 .current {
+    font-size: 23px;
+}
+
+ul {
+    list-style: none;
+}
+
+li {
     font-size: 23px;
 }
 
