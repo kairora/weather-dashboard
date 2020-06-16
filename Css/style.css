@@ -24,12 +24,12 @@ header h1 {
     font-size: 60px;
 }
 
-h2 {
+h2, h3, h4 {
     font-weight: bold;
 }
 .input {
     height: 3.5vh;
-    width: 15vw;
+    width: 20vw;
 }
 
 #searchBtn {
@@ -40,3 +40,6 @@ h2 {
 .current {
     font-size: 23px;
 }
+
+
+
