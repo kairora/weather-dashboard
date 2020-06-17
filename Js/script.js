@@ -1,26 +1,29 @@
-$(document).ready(function() {
-    var cityArr = [];  
-    // var listItem = $("<li>");
-    var unOrdList = $("<ul>");  
+$(document).ready(function () {
+    var cityArr = [];
+    var unOrdList = $("#cities")
 
-    $("#searchBtn").on("click", function(event) {
-    var city = $(".input").val();
-    var m = moment();
-    var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + token;
-    
+    $("#searchBtn").on("click", function (event) {
+        var city = $(".input").val();
+        var m = moment();
+        var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + token;
+
+        var UVqueryURL = "http://api.openweathermap.org/data/2.5/uvi?appid=" + token + "&lat=" + lat + "&lon=" + lon;
+
+        event.preventDefault();
+
 
         $.ajax({
             url: queryURL,
             method: "GET",
-        }).then(function(response) {
+        }).then(function (response) {
             // temp converter variable
-            var tempConv = (response.main.temp - 273.15) * (9/5) + 32;
+            var tempConv = (response.main.temp - 273.15) * (9 / 5) + 32;
             // converts timezone to UTC offset in minutes
-            var UTC = response.timezone/60;
+            var UTC = response.timezone / 60;
             // inputs UTC offset and outputs a date stored in var
             var date = m.utcOffset(UTC).format("M/DD/YYYY");
             // displays city name + date
-            $(".currentcity").text((response.name) +  " " + "(" + date + ")");
+            $(".currentcity").text((response.name) + " " + "(" + date + ")");
             // icon
             $(".weatherIcon").attr("class", response.weather.icon);
             // temperature
@@ -31,31 +34,59 @@ $(document).ready(function() {
             $("#cwind").text("Wind Speed: " + response.wind.speed + " MPH");
             // UV index
             $("#cuv").text("UV Index: " + response.name);
-            // adds cities to array
-            cityArr.push(city);
-            var value = JSON.stringify(cityArr)
-            // save in localStorage
-            localStorage.setItem("cities", value);
-            // sets values into list elements
-            JSON.parse(value);
-            var cityList = $("<li>").text(city);
-            // var unOrdList = $("<ul>");
-            unOrdList.append(cityList);
-            
-            $("#cities").append(unOrdList);
+           
+            var lat = response.coord.lat;
+            var lon = response.coord.lon;
+            // console.log(response);
+            // console.log("lat: " + lat);
+            // console.log("lon: " + lon);
+
+            return lat, lon;
             
 
         });
 
+        $.ajax({
+            url: queryURL,
+            method: "GET",
+        }).then(function (response) {
 
-    });
-    // var stringCity = JSON.stringify("cities");
-    // console.log(stringCity)
-    // var parsedCities = JSON.parse(localStorage.getItem("cities"));
-    // parsedCities.forEach(city => { 
-    //     unOrdList.append(listItem.text(city));
-    //      });
-    //      $("#cities").append(unOrdList);
-    
-    
+        });
+
+        // adds cities to array
+        cityArr.push(city);
+        // stringifies the array
+        var value = JSON.stringify(cityArr);
+        // saves string in localStorage
+        localStorage.setItem("cities", value);
+        // turns string into an array
+        JSON.parse(value);
+
+        // inserts the city input to an LI element
+        var cityList = $("<li>").text(city);
+        // appends the listed city into the unordered list
+        unOrdList.append(cityList);
+
+
+        // grabs the last city in the array
+        var lastCity = cityArr[cityArr.length - 1];
+        // console.log(lastCity);
+
+
+    }); // End of Search button click function
+
+    var parsedCities = JSON.parse(localStorage.getItem("cities"));
+    // when the page reloads, display the list of cities in the HTML
+    // localStorage.getItem(cities);
+    if (parsedCities !== null) {
+        cityArr = parsedCities;
+        var newOrdList = null;
+        parsedCities.forEach(city => {
+            newOrdList = unOrdList.append($("<li>").text(city));
+        });
+        $("#cities").append(newOrdList);
+        //  saves in storage but removes the top city on restart, then removes all but last entered city on restart??
+    }
+
+
 });
