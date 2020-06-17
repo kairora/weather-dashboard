@@ -49,5 +49,18 @@ li {
     font-size: 23px;
 }
 
+#low {
+    background: rgb(0, 134, 0);
+    color:white
+}
 
+#lmoderate {
+    background: rgb(255, 238, 5);
+    color: black;
+}
+
+#high {
+    background: red;
+    color: white;
+}
 

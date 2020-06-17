@@ -7,7 +7,7 @@ $(document).ready(function () {
         var m = moment();
         var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + token;
 
-        var UVqueryURL = "http://api.openweathermap.org/data/2.5/uvi?appid=" + token + "&lat=" + lat + "&lon=" + lon;
+        // var UVqueryURL = "http://api.openweathermap.org/data/2.5/uvi?appid=" + token + "&lat=" + lat + "&lon=" + lon;
 
         event.preventDefault();
 
@@ -32,26 +32,41 @@ $(document).ready(function () {
             $("#chumid").text("Humidity: " + response.main.humidity + "%");
             // wind speed
             $("#cwind").text("Wind Speed: " + response.wind.speed + " MPH");
-            // UV index
-            $("#cuv").text("UV Index: " + response.name);
+            
            
             var lat = response.coord.lat;
             var lon = response.coord.lon;
             // console.log(response);
             // console.log("lat: " + lat);
             // console.log("lon: " + lon);
-
-            return lat, lon;
+           
+            var UVqueryURL = "http://api.openweathermap.org/data/2.5/uvi?appid=" + token + "&lat=" + lat + "&lon=" + lon;
             
+            $.ajax({
+                url: UVqueryURL,
+                method: "GET",
+            }).then(function (response) {
+                console.log(response);
+                // UV index
+                $("#cuv").text("UV Index: " + response.value);
+    
+            });
 
+            
         });
 
-        $.ajax({
-            url: queryURL,
-            method: "GET",
-        }).then(function (response) {
+        
+        // success: function(data) {
+        // $.ajax({
+        //     url: UVqueryURL,
+        //     method: "GET",
+        // }).then(function (response) {
+        //     console.log(response);
+        //     // UV index
+        //     $("#cuv").text("UV Index: " + response.name);
+        // });
 
-        });
+        // };
 
         // adds cities to array
         cityArr.push(city);
