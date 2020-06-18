@@ -49,6 +49,11 @@ li {
     font-size: 23px;
 }
 
+li:hover {
+    background-color: lightgray;
+    cursor:pointer;
+}
+
 .cityLI {
     border-bottom: 2px solid lightseagreen;
     margin-right: 40px;
