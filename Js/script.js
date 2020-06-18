@@ -1,20 +1,30 @@
 $(document).ready(function () {
     var cityArr = [];
     var unOrdList = $("#cities")
+    var firstAJAX;
 
     $("#searchBtn").on("click", function (event) {
         var city = $(".input").val();
+        var cityBtnTxt = $("cityLI").text();
         var m = moment();
         var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + token;
 
-        // var UVqueryURL = "http://api.openweathermap.org/data/2.5/uvi?appid=" + token + "&lat=" + lat + "&lon=" + lon;
-
-        event.preventDefault();
-
-
+        // function clickChecker() {
+        //     if ("#searchBtn" === clicked) {
+        //         return city;
+        //     } else if (($("li")) === clicked) {
+        //         return cityBtnTxt;
+        //     }
+        // }
+        event.preventDefault(); 
+        
+        
         $.ajax({
             url: queryURL,
             method: "GET",
+            success: function(data){
+                firstAJAX = data;
+            }
         }).then(function (response) {
             // temp converter variable
             var tempConv = (response.main.temp - 273.15) * (9 / 5) + 32;
@@ -24,14 +34,22 @@ $(document).ready(function () {
             var date = m.utcOffset(UTC).format("M/DD/YYYY");
             // displays city name + date
             $(".currentcity").text((response.name) + " " + "(" + date + ")");
+            var stringName = JSON.stringify(response.name)
+            localStorage.setItem("NowCity", stringName);
             // icon
             $(".weatherIcon").attr("class", response.weather.icon);
-            // temperature
+            
+            // temperature display and set into localStorage
             $("#ctemp").text("Temperature: " + tempConv.toFixed(1) + "°F");
-            // humidity
+            localStorage.setItem("NowTemp", tempConv.toFixed(1) + "°F");
+            // humidity display and set into localStorage
             $("#chumid").text("Humidity: " + response.main.humidity + "%");
-            // wind speed
+            var stringHum = JSON.stringify(response.main.humidity + "%")
+            localStorage.setItem("NowHum", stringHum);
+            // wind speed display and set into localStorage
             $("#cwind").text("Wind Speed: " + response.wind.speed + " MPH");
+            var stringWind = JSON.stringify(response.wind.speed + " MPH")
+            localStorage.setItem("NowHum", stringWind);
             
            
             var lat = response.coord.lat;
@@ -41,32 +59,67 @@ $(document).ready(function () {
             // console.log("lon: " + lon);
            
             var UVqueryURL = "http://api.openweathermap.org/data/2.5/uvi?appid=" + token + "&lat=" + lat + "&lon=" + lon;
+            var uvValue = response.value
             
             $.ajax({
                 url: UVqueryURL,
                 method: "GET",
             }).then(function (response) {
-                console.log(response);
-                // UV index
-                $("#cuv").text("UV Index: " + response.value);
-    
-            });
+                // Creates and inserts UV value with colored background depending on severity level
+                var uvValue = response.value
+                $("#cuv").text("UV Index: ");
+                $("#cuv").append($("<span>", {class: "cSpan"}));
+                $(".cSpan").text(uvValue);
 
+
+
+                console.log(uvValue)
+                if (uvValue >= 0 && uvValue <= 2.999 ) {
+                    $(".cSpan").attr("id", "low")
+                } else if (uvValue >= 3 && uvValue <= 5.999 ) {
+                    $(".cSpan").attr("id", "moderate")
+                } else if (uvValue >= 6 && uvValue <= 7.999 ) {
+                    $(".cSpan").attr("id", "midhigh")
+                } else if (uvValue >= 8 && uvValue <= 10.999 ) {
+                    $(".cSpan").attr("id", "high")
+                } else if (uvValue >= 11) {
+                    $(".cSpan").attr("id", "severe")
+                } else {
+                    $(".cSpan").text("UV Index: N/A")
+                }
+            });
             
+            var stringAJAX = JSON.stringify(firstAJAX)
+            // // JSON.parse(firstAJAX);
+            // console.log("first AJAX: " + JSON.parse(stringAJAX));
+            console.log("first AJAX function: " + stringAJAX);
+            // console.log(JSON.parse(firstAJAX.sys.name));
+
+            localStorage.setItem("CityName", stringAJAX.data.name)
+            // var lastTempConv = (firstAJAX.data.main.temp - 273.15) * (9 / 5) + 32;
+            // $(".currentcity").text((firstAJAX.data.name) + " " + "(" + date + ")");
+            // // icon
+            // $(".weatherIcon").attr("class", firstAJAX.data.weather.icon);
+            // // temperature
+            // $("#ctemp").text("Temperature: " + lastTempConv.toFixed(1) + "°F");
+            // // humidity
+            // $("#chumid").text("Humidity: " + firstAJAX.data.main.humidity + "%");
+            // // wind speed
+            // $("#cwind").text("Wind Speed: " + firstAJAX.data.wind.speed + " MPH");
         });
 
         
-        // success: function(data) {
-        // $.ajax({
-        //     url: UVqueryURL,
-        //     method: "GET",
-        // }).then(function (response) {
-        //     console.log(response);
-        //     // UV index
-        //     $("#cuv").text("UV Index: " + response.name);
-        // });
-
-        // };
+        // $(".currentcity").text((response.name) + " " + "(" + date + ")");
+        //     // icon
+        //     $(".weatherIcon").attr("class", response.weather.icon);
+        //     // temperature
+        //     $("#ctemp").text("Temperature: " + tempConv.toFixed(1) + "°F");
+        //     // humidity
+        //     $("#chumid").text("Humidity: " + response.main.humidity + "%");
+        //     // wind speed
+        //     $("#cwind").text("Wind Speed: " + response.wind.speed + " MPH");
+        
+        
 
         // adds cities to array
         cityArr.push(city);
@@ -76,32 +129,47 @@ $(document).ready(function () {
         localStorage.setItem("cities", value);
         // turns string into an array
         JSON.parse(value);
-
-        // inserts the city input to an LI element
-        var cityList = $("<li>").text(city);
-        // appends the listed city into the unordered list
-        unOrdList.append(cityList);
-
-
+        // inserts the city input to an LI element with class and styles
+        unOrdList.append($("<li>", {class: "cityLI"}).text(city));
         // grabs the last city in the array
         var lastCity = cityArr[cityArr.length - 1];
-        // console.log(lastCity);
+
 
 
     }); // End of Search button click function
 
-    var parsedCities = JSON.parse(localStorage.getItem("cities"));
+
+    // On Reload
+    var storedCities = localStorage.getItem("cities");
+    var parsedCities = JSON.parse(storedCities);
     // when the page reloads, display the list of cities in the HTML
-    // localStorage.getItem(cities);
     if (parsedCities !== null) {
         cityArr = parsedCities;
         var newOrdList = null;
         parsedCities.forEach(city => {
-            newOrdList = unOrdList.append($("<li>").text(city));
+            newOrdList = unOrdList.append($("<li>", {class: "cityLI"}).text(city));
+            
         });
         $("#cities").append(newOrdList);
-        //  saves in storage but removes the top city on restart, then removes all but last entered city on restart??
     }
+
+    
+    // var lastTempConv = (firstAJAX.data.main.temp - 273.15) * (9 / 5) + 32;
+    $
+    // // icon
+    // $(".weatherIcon").attr("class", firstAJAX.data.weather.icon);
+    // // temperature
+    // $("#ctemp").text("Temperature: " + lastTempConv.toFixed(1) + "°F");
+    // // humidity
+    // $("#chumid").text("Humidity: " + firstAJAX.data.main.humidity + "%");
+    // // wind speed
+    // $("#cwind").text("Wind Speed: " + firstAJAX.data.wind.speed + " MPH");
+    
+    
+
+    // grabs the last city in the array
+    // var lastCity = parsedCities[parsedCities.length - 1];
+    // console.log(lastCity);
 
 
 });

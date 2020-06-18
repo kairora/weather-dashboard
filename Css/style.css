@@ -49,18 +49,44 @@ li {
     font-size: 23px;
 }
 
-#low {
-    background: rgb(0, 134, 0);
-    color:white
+.cityLI {
+    border-bottom: 2px solid lightseagreen;
+    margin-right: 40px;
+    text-transform: capitalize;
+    font-size: 30px;
+    
 }
 
-#lmoderate {
+#low {
+    background: rgb(0, 134, 0);
+    color:white;
+    padding: 10px 10px;
+    border-radius: 15px;
+}
+
+#moderate {
     background: rgb(255, 238, 5);
     color: black;
+    padding: 10px 10px;
+    border-radius: 15px;
+}
+#midhigh {
+    background: rgb(255, 126, 5);
+    color: black;
+    padding: 10px 10px;
+    border-radius: 15px;
 }
 
 #high {
     background: red;
     color: white;
+    padding: 10px 10px;
+    border-radius: 15px;
+}
+#severe {
+    background: rgb(96, 0, 160);
+    color: white;
+    padding: 10px 10px;
+    border-radius: 15px;
 }
 
