@@ -3,13 +3,14 @@ $(document).ready(function () {
     var unOrdList = $("#cities")
     var firstAJAX;
     var m = moment();
-
+    var p = $("<p>");
 
     $("#searchBtn").on("click", function (event) {
         var city = $(".input").val();
         var cityBtnTxt = $("cityLI").text();
         var m = moment();
         var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + token;
+        var forecastURL = "http://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=" + token;
 
         // function clickChecker() {
         //     if ("#searchBtn" === clicked) {
@@ -93,13 +94,15 @@ $(document).ready(function () {
                 }
             });
 
-            var stringAJAX = JSON.stringify(firstAJAX)
+        
+
+            // var stringAJAX = JSON.stringify(firstAJAX)
             // // JSON.parse(firstAJAX);
             // console.log("first AJAX: " + JSON.parse(stringAJAX));
-            console.log("first AJAX function: " + stringAJAX);
+            // console.log("first AJAX function: " + stringAJAX);
             // console.log(JSON.parse(firstAJAX.sys.name));
 
-            localStorage.setItem("CityName", stringAJAX.data.name)
+            // localStorage.setItem("CityName", stringAJAX.data.name)
             // var lastTempConv = (firstAJAX.data.main.temp - 273.15) * (9 / 5) + 32;
             // $(".currentcity").text((firstAJAX.data.name) + " " + "(" + date + ")");
             // // icon
@@ -112,17 +115,19 @@ $(document).ready(function () {
             // $("#cwind").text("Wind Speed: " + firstAJAX.data.wind.speed + " MPH");
         });
 
+        
+        $.ajax({
+            url: forecastURL,
+            method: "GET",
+        }).then(function (result) {
+            // console.log("result  " + JSON.stringify(result));
+            var humidity = "Humidity: " + result.list[0].main.humidity + "%"
+            $("#day1").append($(p, { class: "hum1" }));
 
-        // $(".currentcity").text((response.name) + " " + "(" + date + ")");
-        //     // icon
-        //     $(".weatherIcon").attr("class", response.weather.icon);
-        //     // temperature
-        //     $("#ctemp").text("Temperature: " + tempConv.toFixed(1) + "°F");
-        //     // humidity
-        //     $("#chumid").text("Humidity: " + response.main.humidity + "%");
-        //     // wind speed
-        //     $("#cwind").text("Wind Speed: " + response.wind.speed + " MPH");
 
+            
+
+        });
 
 
         // adds cities to array
@@ -156,9 +161,8 @@ $(document).ready(function () {
         });
         $("#cities").append(newOrdList);
     }
-    // date +
+
     // Display last saved city data
-    // Last City
     $(".currentcity").text(localStorage.getItem("NowCity") + " " + "(" + localStorage.getItem("NowDate") + ")");
     // var lastTempConv = (firstAJAX.data.main.temp - 273.15) * (9 / 5) + 32;
 
