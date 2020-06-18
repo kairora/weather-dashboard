@@ -3,7 +3,13 @@ $(document).ready(function () {
     var unOrdList = $("#cities")
     var firstAJAX;
     var m = moment();
-    var p = $("<p>");
+    var pHum = $("<p>", {class: "hum"});
+    var foreCastEl1 = $("#day1");
+    var foreCastEl2 = $("#day2");
+    var foreCastEl3 = $("#day3");
+    var foreCastEl4 = $("#day4");
+    var foreCastEl5 = $("#day5");
+
 
     $("#searchBtn").on("click", function (event) {
         var city = $(".input").val();
@@ -35,13 +41,14 @@ $(document).ready(function () {
             var UTC = response.timezone / 60;
             // inputs UTC offset and outputs a date stored in var
             var date = m.utcOffset(UTC).format("M/DD/YYYY");
-            localStorage.setItem("NowDate", date)
+            localStorage.setItem("NowDate", date);
             // displays city name + date
             $(".currentcity").text((response.name) + " " + "(" + date + ")");
             var storedName = response.name
             localStorage.setItem("NowCity", storedName);
             // icon
-            $(".weatherIcon").attr("class", response.weather.icon);
+            var icon = $("<img>").attr("src", "http://openweathermap.org/img/w/" + response.weather[0].icon + ".png");
+            $(".currentcity").append(icon);
 
             // temperature display and set into localStorage
             $("#ctemp").text("Temperature: " + tempConv.toFixed(1) + "°F");
@@ -115,15 +122,27 @@ $(document).ready(function () {
             // $("#cwind").text("Wind Speed: " + firstAJAX.data.wind.speed + " MPH");
         });
 
-        
+        // 5-day forecast AJAX 
         $.ajax({
             url: forecastURL,
             method: "GET",
         }).then(function (result) {
+            var resultList = result.list;
             // console.log("result  " + JSON.stringify(result));
-            var humidity = "Humidity: " + result.list[0].main.humidity + "%"
-            $("#day1").append($(p, { class: "hum1" }));
-
+            // for (var i = 0; i < 5; i++){
+            // humidity = "Humidity: " + result.list[i].main.humidity + "%"
+            // $(".future").prepend($("<section>", {class: "day"}).append(pHum.text(humidity)));
+            // }
+            humidity1 = "Humidity: " + resultList[0].main.humidity + "%"
+            foreCastEl1.append(pHum.text(humidity1));
+            humidity2 = "Humidity: " + resultList[9].main.humidity + "%"
+            foreCastEl2.append(pHum.text(humidity2));
+            humidity3 = "Humidity: " + resultList[0].main.humidity + "%"
+            foreCastEl3.append(pHum.text(humidity3));
+            humidity4 = "Humidity: " + resultList[0].main.humidity + "%"
+            foreCastEl4.append(pHum.text(humidity4));
+            humidity5 = "Humidity: " + resultList[0].main.humidity + "%"
+            foreCastEl5.append(pHum.text(humidity5));
 
             
 

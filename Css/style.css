@@ -95,9 +95,14 @@ border: 1px solid black;
 border-radius: 15px;
 background-color: rgb(13, 71, 228);
 color: white;
-width: 11vw;
+width: 10vw;
 height: 20vh;
 display: inline-block;
+margin-right: 10px;
+}
+.hum {
+    font-size:  20px;
+    text-align: center;
 
 }
 
