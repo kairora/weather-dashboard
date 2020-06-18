@@ -18,7 +18,15 @@ $(document).ready(function () {
         inputCity(city);
         cityStorage(city);
 
-    });  
+    });
+    $("#cities").on("click", "li", function (event) {
+        event.preventDefault();
+        inputCity($(this).text());
+        // console.log($(this).text());
+
+
+    });
+
 
     function inputCity (city) {
         var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + token;
@@ -123,7 +131,7 @@ $(document).ready(function () {
         // 5-day forecast AJAX 
     function foreCastCall() {
         var forecastURL = "http://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=" + token;
-        
+
         $.ajax({
             url: forecastURL,
             method: "GET",
