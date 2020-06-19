@@ -19,9 +19,6 @@ A very important feature is that the dashboard stores the weather data even afte
 
 You can also click the stored cities and be taken back to that city's weather information.
 
+The dashboard is also able to display not only the current weather of a city, but also that city's 5-day forecast.  In the forecast, the user can view the dates, a weather icon, and the temperature and humidity for those five days.
 
-## Future Functionality
-
-The dashboard is intended to display not only the current weather of a city, but also that city's 5-day forecast.  This app currently features the backdrops for displaying the five days of weather along with that weather's icons.
-
-![Scheduler-Date Photo](/Assets/broken.PNG)
+![Scheduler-Date Photo](/Assets/forecast.PNG)

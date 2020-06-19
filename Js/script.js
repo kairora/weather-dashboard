@@ -4,11 +4,7 @@ $(document).ready(function () {
     var firstAJAX;
     var m = moment();
     var p = $("<p>");
-    var foreCastEl1 = $("#day1");
-    var foreCastEl2 = $("#day2");
-    var foreCastEl3 = $("#day3");
-    var foreCastEl4 = $("#day4");
-    var foreCastEl5 = $("#day5");
+    var forecastSect = $("<section>", { class: "day" });
     var city = $(".input").val();
 
     // search button click 
@@ -109,25 +105,6 @@ $(document).ready(function () {
         });
     }
 
-
-    // var stringAJAX = JSON.stringify(firstAJAX)
-    // // JSON.parse(firstAJAX);
-    // console.log("first AJAX: " + JSON.parse(stringAJAX));
-    // console.log("first AJAX function: " + stringAJAX);
-    // console.log(JSON.parse(firstAJAX.sys.name));
-
-    // localStorage.setItem("CityName", stringAJAX.data.name)
-    // var lastTempConv = (firstAJAX.data.main.temp - 273.15) * (9 / 5) + 32;
-    // $(".currentcity").text((firstAJAX.data.name) + " " + "(" + date + ")");
-    // // icon
-    // $(".weatherIcon").attr("class", firstAJAX.data.weather.icon);
-    // // temperature
-    // $("#ctemp").text("Temperature: " + lastTempConv.toFixed(1) + "°F");
-    // // humidity
-    // $("#chumid").text("Humidity: " + firstAJAX.data.main.humidity + "%");
-    // // wind speed
-    // $("#cwind").text("Wind Speed: " + firstAJAX.data.wind.speed + " MPH");
-
     // 5-day forecast AJAX 
     function foreCastCall(city) {
         var forecastURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=97ac3291da095ed4502e29467303d678&units=imperial";
@@ -136,18 +113,12 @@ $(document).ready(function () {
             method: "GET",
         }).then(function (result) {
             console.log(result);
-            // console.log(result.list[0].dt);
-            console.log("result list" + result.list[0].dt_txt);
             // start the forecast div empty
             $(".future").empty();
 
 
             for (var i = 0; i < result.list.length; i++) {
-                // var add = i + 1;
-                // var resultList = JSON.stringify(result.list[i]);
-                // var resultList = result.list;
-                // console.log("hour text: "  + result.list[0].dt_text);
-                // console.log("result length  " + resultList.length);
+                var add = i + 1;
                 if (result.list[i].dt_txt.search("12:00:00") !== -1) {
                     // Temp Converter
                     // var foreTempConv = (result.list[i].main.temp - 273.15) * (9 / 5) + 32;
@@ -155,67 +126,42 @@ $(document).ready(function () {
                     var forecastSect = $("<section>", { class: "day" });
 
                     // creates p el with date text
-                    // var foreDate = p.text(moment.unix(response.list[i].dt).format("MM/DD/YYYY"));
-                    // var foreDate = p.text(moment.add(add, "day").format("MM/DD/YYYY"));
-                    // var formattedDate = moment(result.list.dt_txt).format("M/DD/YYYY");
                     var formattedDate = new Date(result.list[i].dt_txt).toLocaleDateString();
-                    var foreDate = p.text(formattedDate);
-                    console.log("date: " + foreDate);
+                    localStorage.setItem("foreDates", formattedDate);
 
-                    // var theWeather = result.list[i].weather
-                    
-                    // for (var j =0; j < theWeather.length; j++) {
-
-                    // }
-                    console.log("icon: " + result.list[0].weather[0].icon);
 
                     // creates an img tag with icon
                     var foreIcon = $("<img>").attr("src", "http://openweathermap.org/img/wn/" + result.list[i].weather[0].icon + "@2x.png");
+                    localStorage.setItem("foreIcons", foreIcon);
 
 
 
                     // creates a p with the temp
-                    var foreTemp = p.text("Temperature: " + result.list[i].main.temp_max + " °F");
-
-                    console.log("temp: " + foreTemp);
+                    var fiveTemp = result.list[i].main.temp_max;
+                    var foreTemp = "Temperature: " + fiveTemp + " °F";
+                    localStorage.setItem("foreTemps", foreTemp);
 
 
                     // creates a p with the humidity
-                    var foreHum = p.text("Humidity: " + result.list[i].main.humidity + "%");
+                    var humidity = "Humidity: " + JSON.stringify(result.list[i].main.humidity) + "%"
+                    var foreHum = humidity;
+                    localStorage.setItem("foreHums", foreHum);
 
-                    console.log("humidity: " + foreHum);
 
 
 
                     // append date
-                    $(".future").append(forecastSect.append(foreDate));
+                    $(".future").append(forecastSect.append(formattedDate, $("<br>")));
                     // append icon
-                    $(".future").append(forecastSect.append(foreIcon));
-                    // append icon
-                    $(".future").append(forecastSect.append(foreTemp));
-                    // append icon
+                    $(".future").append(forecastSect.append(foreIcon, $("<br>")));
+                    // append Temp
+                    $(".future").append(forecastSect.append(foreTemp, $("<br>")));
+                    // append Humidity
                     $(".future").append(forecastSect.append(foreHum));
-
-                    // humidity = "Humidity: " + result.list[i].main.humidity + "%"
-                    // $(".future").prepend($("<section>", {class: "day"}).append(pHum.text(humidity)));
                 }
             }
-
-
-
-            // humidity1 = "Humidity: " + resultList[0].main.humidity + "%"
-            // foreCastEl1.append(pHum.text(humidity1));
-            // humidity2 = "Humidity: " + resultList[9].main.humidity + "%"
-            // foreCastEl2.append(pHum.text(humidity2));
-            // humidity3 = "Humidity: " + resultList[0].main.humidity + "%"
-            // foreCastEl3.append(pHum.text(humidity3));
-            // humidity4 = "Humidity: " + resultList[0].main.humidity + "%"
-            // foreCastEl4.append(pHum.text(humidity4));
-            // humidity5 = "Humidity: " + resultList[0].main.humidity + "%"
-            // foreCastEl5.append(pHum.text(humidity5));
-
         });
-    }
+    };
 
     function cityStorage(city) {
         // adds cities to array
@@ -230,7 +176,15 @@ $(document).ready(function () {
         unOrdList.append($("<li>", { class: "cityLI" }).text(city));
         // grabs the last city in the array
         var lastCity = cityArr[cityArr.length - 1];
-
+        // append date
+        
+        // $(".future").append(forecastSect.append(localStorage.getItem("foreDates"), $("<br>")));
+        // // append icon
+        // $(".future").append(forecastSect.append(localStorage.getItem("foreIcons"), $("<br>")));
+        // // append Temp
+        // $(".future").append(forecastSect.append(localStorage.getItem("foreTemps"), $("<br>")));
+        // // append Humidity
+        // $(".future").append(forecastSect.append(localStorage.getItem("foreHums")));
 
 
     }

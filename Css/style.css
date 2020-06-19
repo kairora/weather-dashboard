@@ -99,12 +99,19 @@ li:hover {
 border: 1px solid black;
 border-radius: 15px;
 background-color: rgb(13, 71, 228);
-color: white;
-width: 200px;
+width: 230px;
 height: 250px;
 display: inline-block;
 margin-right: 10px;
+margin-top: 10px;
+color: white;
+font-size: 20px;
+padding: 10px;
 }
+
+
+
+
 .hum {
     font-size:  20px;
     text-align: center;
