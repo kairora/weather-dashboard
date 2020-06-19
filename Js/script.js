@@ -13,7 +13,7 @@ $(document).ready(function () {
 
     // search button click 
     $("#searchBtn").on("click", function (event) {
-        var city = $(".input").val();
+        // var city = $(".input").val();
         // var cityBtnTxt = $("cityLI").text();
         event.preventDefault();
         // call first AJAX
