@@ -17,8 +17,22 @@ A very important feature is that the dashboard stores the weather data even afte
 
 ![Scheduler-Date Photo](/Assets/storage.PNG)
 
-You can also click the stored cities and be taken back to that city's weather information.
+You can also click the stored cities and be taken back to that city's weather information. The hover animation creates a change from white to gray to indicate the mouseover. The cursor also changes to a fingerclick cursor.
+``` CSS
+li:hover {
+    background-color: lightgray;
+    cursor:pointer;
+});
+```
+
+![Scheduler-Date Photo](/Assets/hover.PNG)
 
 The dashboard is also able to display not only the current weather of a city, but also that city's 5-day forecast.  In the forecast, the user can view the dates, a weather icon, and the temperature and humidity for those five days.
 
 ![Scheduler-Date Photo](/Assets/forecast.PNG)
+
+### Link to the deployed app
+[Weather Dashboard App](https://kairora.github.io/weather-dashboard/)
+
+### Link to my GitHub Repo
+[My GitHub Repo](https://github.com/kairora/weather-dashboard)

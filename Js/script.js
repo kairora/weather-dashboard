@@ -16,21 +16,13 @@ $(document).ready(function () {
         inputCity(city);
         cityStorage(city);
         foreCastCall(city);
-
-
-
     });
     // List item click
     $("#cities").on("click", "li", function (event) {
         event.preventDefault();
         inputCity($(this).text());
         foreCastCall($(this).text());
-        // foreCastCall($(this).text());
-        // // console.log($(this).text());
-
-
     });
-
     // grabs the needed reponse data
     function inputCity(city) {
         var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=97ac3291da095ed4502e29467303d678";
@@ -72,7 +64,6 @@ $(document).ready(function () {
             // store and pass the lat and lon from first AJAX
             var lat = response.coord.lat;
             var lon = response.coord.lon;
-
             uvFinder(lat, lon);
         });
     }
@@ -105,7 +96,6 @@ $(document).ready(function () {
             }
         });
     }
-
     // 5-day forecast AJAX 
     function foreCastCall(city) {
         var forecastURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=97ac3291da095ed4502e29467303d678&units=imperial";
@@ -116,8 +106,6 @@ $(document).ready(function () {
             console.log(result);
             // start the forecast div empty
             $(".future").empty();
-
-
             for (var i = 0; i < result.list.length; i++) {
                 var add = i + 1;
                 if (result.list[i].dt_txt.search("12:00:00") !== -1) {
@@ -125,32 +113,20 @@ $(document).ready(function () {
                     // var foreTempConv = (result.list[i].main.temp - 273.15) * (9 / 5) + 32;
                     // creates section with
                     var forecastSect = $("<section>", { class: "day" });
-
                     // creates p el with date text
                     var formattedDate = new Date(result.list[i].dt_txt).toLocaleDateString();
                     localStorage.setItem("foreDates", formattedDate);
-
-
                     // creates an img tag with icon
                     var foreIcon = $("<img>").attr("src", "http://openweathermap.org/img/wn/" + result.list[i].weather[0].icon + "@2x.png");
                     localStorage.setItem("foreIcons", foreIcon);
-
-
-
                     // creates a p with the temp
                     var fiveTemp = result.list[i].main.temp_max;
                     var foreTemp = "Temperature: " + fiveTemp + " °F";
                     localStorage.setItem("foreTemps", foreTemp);
-
-
                     // creates a p with the humidity
                     var humidity = "Humidity: " + JSON.stringify(result.list[i].main.humidity) + "%"
                     var foreHum = humidity;
                     localStorage.setItem("foreHums", foreHum);
-
-
-
-
                     // append date
                     $(".future").append(forecastSect.append(formattedDate, $("<br>")));
                     // append icon
@@ -200,17 +176,7 @@ $(document).ready(function () {
     }
 
     // Display last saved city data
-    $(".currentcity").text(localStorage.getItem("NowCity") + " " + "(" + localStorage.getItem("NowDate") + ")");
-    // var lastTempConv = (firstAJAX.data.main.temp - 273.15) * (9 / 5) + 32;
-
-    // icon
-    // $(".weatherIcon").attr("class", firstAJAX.data.weather.icon);
-    // temperature
-    $("#ctemp").text("Temperature: " + localStorage.getItem("NowTemp"));
-    // // humidity
-    $("#chumid").text("Humidity: " + localStorage.getItem("NowHum"));
-    // wind speed
-    $("#cwind").text("Wind Speed: " + localStorage.getItem("NowWind"));
+    inputCity(localStorage.getItem("NowCity"));
     // UV 
     var lastUV = localStorage.getItem("NowUV")
     $("#cuv").text("UV Index: ");
@@ -230,14 +196,4 @@ $(document).ready(function () {
         $(".cSpan").text("UV Index: N/A")
     }
     foreCastCall(localStorage.getItem("NowCity"));
-
-
-
-
-
-    // grabs the last city in the array
-    // var lastCity = parsedCities[parsedCities.length - 1];
-    // console.log(lastCity);
-
-
 });
