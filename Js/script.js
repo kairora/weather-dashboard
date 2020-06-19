@@ -9,26 +9,33 @@ $(document).ready(function () {
     var foreCastEl3 = $("#day3");
     var foreCastEl4 = $("#day4");
     var foreCastEl5 = $("#day5");
+    var city = $(".input").val();
 
-
+    // search button click 
     $("#searchBtn").on("click", function (event) {
         var city = $(".input").val();
-        var cityBtnTxt = $("cityLI").text();
+        // var cityBtnTxt = $("cityLI").text();
         event.preventDefault();
+        // call first AJAX
         inputCity(city);
         cityStorage(city);
+        foreCastCall(city);
+
+
 
     });
+    // List item click
     $("#cities").on("click", "li", function (event) {
         event.preventDefault();
         inputCity($(this).text());
-        // console.log($(this).text());
+        // foreCastCall($(this).text());
+        // // console.log($(this).text());
 
 
     });
 
-
-    function inputCity (city) {
+    // grabs the needed reponse data
+    function inputCity(city) {
         var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + token;
 
         $.ajax({
@@ -54,8 +61,8 @@ $(document).ready(function () {
             $(".currentcity").append(icon);
 
             // temperature display and set into localStorage
-            $("#ctemp").text("Temperature: " + tempConv.toFixed(1) + "°F");
-            localStorage.setItem("NowTemp", tempConv.toFixed(1) + "°F");
+            $("#ctemp").text("Temperature: " + tempConv.toFixed(1) + " °F");
+            localStorage.setItem("NowTemp", tempConv.toFixed(1) + " °F");
             // humidity display and set into localStorage
             $("#chumid").text("Humidity: " + response.main.humidity + "%");
             var storedHum = response.main.humidity + "%"
@@ -65,93 +72,134 @@ $(document).ready(function () {
             var storedWind = response.wind.speed + " MPH"
             localStorage.setItem("NowWind", storedWind);
 
-
+            // store and pass the lat and lon from first AJAX
             var lat = response.coord.lat;
             var lon = response.coord.lon;
-            // console.log(response);
-            // console.log("lat: " + lat);
-            // console.log("lon: " + lon);
+
             uvFinder(lat, lon);
         });
     }
-
-        function uvFinder(lat, lon) {
-                var UVqueryURL = "http://api.openweathermap.org/data/2.5/uvi?appid=" + token + "&lat=" + lat + "&lon=" + lon;
-
-
-                $.ajax({
-                    url: UVqueryURL,
-                    method: "GET",
-                }).then(function (response) {
-                    // Creates and inserts UV value with colored background depending on severity level
-                    var uvValue = response.value
-                    $("#cuv").text("UV Index: ");
-                    $("#cuv").append($("<span>", { class: "cSpan" }));
-                    $(".cSpan").text(uvValue);
-                    localStorage.setItem("NowUV", uvValue);
-
-
-
-                    console.log(uvValue)
-                    if (uvValue >= 0 && uvValue <= 2.999) {
-                        $(".cSpan").attr("id", "low")
-                    } else if (uvValue >= 3 && uvValue <= 5.999) {
-                        $(".cSpan").attr("id", "moderate")
-                    } else if (uvValue >= 6 && uvValue <= 7.999) {
-                        $(".cSpan").attr("id", "midhigh")
-                    } else if (uvValue >= 8 && uvValue <= 10.999) {
-                        $(".cSpan").attr("id", "high")
-                    } else if (uvValue >= 11) {
-                        $(".cSpan").attr("id", "severe")
-                    } else {
-                        $(".cSpan").text("UV Index: N/A")
-                    }
-                });
+    // grabs the UV from 2nd AJAX with input from first AJAX
+    function uvFinder(lat, lon) {
+        var UVqueryURL = "http://api.openweathermap.org/data/2.5/uvi?appid=" + token + "&lat=" + lat + "&lon=" + lon;
+        $.ajax({
+            url: UVqueryURL,
+            method: "GET",
+        }).then(function (response) {
+            // Creates and inserts UV value with colored background depending on severity level
+            var uvValue = response.value
+            $("#cuv").text("UV Index: ");
+            $("#cuv").append($("<span>", { class: "cSpan" }));
+            $(".cSpan").text(uvValue);
+            localStorage.setItem("NowUV", uvValue);
+            // displays the color level for UV index. 
+            if (uvValue >= 0 && uvValue <= 2.999) {
+                $(".cSpan").attr("id", "low")
+            } else if (uvValue >= 3 && uvValue <= 5.999) {
+                $(".cSpan").attr("id", "moderate")
+            } else if (uvValue >= 6 && uvValue <= 7.999) {
+                $(".cSpan").attr("id", "midhigh")
+            } else if (uvValue >= 8 && uvValue <= 10.999) {
+                $(".cSpan").attr("id", "high")
+            } else if (uvValue >= 11) {
+                $(".cSpan").attr("id", "severe")
+            } else {
+                $(".cSpan").text("UV Index: N/A")
             }
-            
+        });
+    }
 
-                // var stringAJAX = JSON.stringify(firstAJAX)
-                // // JSON.parse(firstAJAX);
-                // console.log("first AJAX: " + JSON.parse(stringAJAX));
-                // console.log("first AJAX function: " + stringAJAX);
-                // console.log(JSON.parse(firstAJAX.sys.name));
 
-                // localStorage.setItem("CityName", stringAJAX.data.name)
-                // var lastTempConv = (firstAJAX.data.main.temp - 273.15) * (9 / 5) + 32;
-                // $(".currentcity").text((firstAJAX.data.name) + " " + "(" + date + ")");
-                // // icon
-                // $(".weatherIcon").attr("class", firstAJAX.data.weather.icon);
-                // // temperature
-                // $("#ctemp").text("Temperature: " + lastTempConv.toFixed(1) + "°F");
-                // // humidity
-                // $("#chumid").text("Humidity: " + firstAJAX.data.main.humidity + "%");
-                // // wind speed
-                // $("#cwind").text("Wind Speed: " + firstAJAX.data.wind.speed + " MPH");
-            
-        // 5-day forecast AJAX 
-    function foreCastCall() {
-        var forecastURL = "http://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=" + token;
+    // var stringAJAX = JSON.stringify(firstAJAX)
+    // // JSON.parse(firstAJAX);
+    // console.log("first AJAX: " + JSON.parse(stringAJAX));
+    // console.log("first AJAX function: " + stringAJAX);
+    // console.log(JSON.parse(firstAJAX.sys.name));
 
+    // localStorage.setItem("CityName", stringAJAX.data.name)
+    // var lastTempConv = (firstAJAX.data.main.temp - 273.15) * (9 / 5) + 32;
+    // $(".currentcity").text((firstAJAX.data.name) + " " + "(" + date + ")");
+    // // icon
+    // $(".weatherIcon").attr("class", firstAJAX.data.weather.icon);
+    // // temperature
+    // $("#ctemp").text("Temperature: " + lastTempConv.toFixed(1) + "°F");
+    // // humidity
+    // $("#chumid").text("Humidity: " + firstAJAX.data.main.humidity + "%");
+    // // wind speed
+    // $("#cwind").text("Wind Speed: " + firstAJAX.data.wind.speed + " MPH");
+
+    // 5-day forecast AJAX 
+    function foreCastCall(city) {
+        var forecastURL = "http://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=" + token + "&units=imperial";
         $.ajax({
             url: forecastURL,
             method: "GET",
         }).then(function (result) {
+            console.log(result);
+            // console.log(result.list[0].dt);
+            console.log("result list" + result.list[0].dt_txt);
+            // start the forecast div empty
             $(".future").empty();
-            // console.log("hour text: "  + resultList[i].dt_text);
-           
-            for (var i = 0; i < result.list.length; i++){
-                var resultList = result.list[i];
-                // console.log("result length  " + resultList.length);
-                if (result.list[i].dt_text.indexOf("12:00:00") !== -1) {
-                    var forecastSect = $("<section>", {class: "day"});
-                    var formattedDate = moment(JSON.stringify(resultList.dt_txt)).format("M/DD/YYYY");
-                    console.log(formattedDate);
-                    var foreDate = p.text(resultList.dt_txt)
-                    forecastSect.append(foreDate)
 
-            humidity = "Humidity: " + result.list[i].main.humidity + "%"
-            $(".future").prepend($("<section>", {class: "day"}).append(pHum.text(humidity)));
-            }}
+
+            for (var i = 0; i < result.list.length; i++) {
+                // var add = i + 1;
+                // var resultList = JSON.stringify(result.list[i]);
+                // var resultList = result.list;
+                // console.log("hour text: "  + result.list[0].dt_text);
+                // console.log("result length  " + resultList.length);
+                if (result.list[i].dt_txt.search("12:00:00") !== -1) {
+                    // Temp Converter
+                    // var foreTempConv = (result.list[i].main.temp - 273.15) * (9 / 5) + 32;
+                    // creates section with
+                    var forecastSect = $("<section>", { class: "day" });
+
+                    // creates p el with date text
+                    // var foreDate = p.text(moment.unix(response.list[i].dt).format("MM/DD/YYYY"));
+                    // var foreDate = p.text(moment.add(add, "day").format("MM/DD/YYYY"));
+                    // var formattedDate = moment(result.list.dt_txt).format("M/DD/YYYY");
+                    var formattedDate = new Date(result.list[i].dt_txt).toLocaleDateString();
+                    var foreDate = p.text(formattedDate);
+                    console.log("date: " + foreDate);
+
+                    // var theWeather = result.list[i].weather
+                    
+                    // for (var j =0; j < theWeather.length; j++) {
+
+                    // }
+                    console.log("icon: " + result.list[0].weather[0].icon);
+
+                    // creates an img tag with icon
+                    var foreIcon = $("<img>").attr("src", "http://openweathermap.org/img/wn/" + result.list[i].weather[0].icon + "@2x.png");
+
+
+
+                    // creates a p with the temp
+                    var foreTemp = p.text("Temperature: " + result.list[i].main.temp_max + " °F");
+
+                    console.log("temp: " + foreTemp);
+
+
+                    // creates a p with the humidity
+                    var foreHum = p.text("Humidity: " + result.list[i].main.humidity + "%");
+
+                    console.log("humidity: " + foreHum);
+
+
+
+                    // append date
+                    $(".future").append(forecastSect.append(foreDate));
+                    // append icon
+                    $(".future").append(forecastSect.append(foreIcon));
+                    // append icon
+                    $(".future").append(forecastSect.append(foreTemp));
+                    // append icon
+                    $(".future").append(forecastSect.append(foreHum));
+
+                    // humidity = "Humidity: " + result.list[i].main.humidity + "%"
+                    // $(".future").prepend($("<section>", {class: "day"}).append(pHum.text(humidity)));
+                }
+            }
 
 
 
@@ -169,7 +217,7 @@ $(document).ready(function () {
         });
     }
 
-    function cityStorage (city) {
+    function cityStorage(city) {
         // adds cities to array
         cityArr.push(city);
         // stringifies the array
