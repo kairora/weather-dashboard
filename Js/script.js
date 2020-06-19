@@ -13,7 +13,7 @@ $(document).ready(function () {
 
     // search button click 
     $("#searchBtn").on("click", function (event) {
-        // var city = $(".input").val();
+        var city = $(".input").val();
         // var cityBtnTxt = $("cityLI").text();
         event.preventDefault();
         // call first AJAX
@@ -81,7 +81,7 @@ $(document).ready(function () {
     }
     // grabs the UV from 2nd AJAX with input from first AJAX
     function uvFinder(lat, lon) {
-        var UVqueryURL = "http://api.openweathermap.org/data/2.5/uvi?appid=97ac3291da095ed4502e29467303d678&lat=" + lat + "&lon=" + lon;
+        var UVqueryURL = "https://api.openweathermap.org/data/2.5/uvi?appid=97ac3291da095ed4502e29467303d678&lat=" + lat + "&lon=" + lon;
         $.ajax({
             url: UVqueryURL,
             method: "GET",
@@ -130,7 +130,7 @@ $(document).ready(function () {
 
     // 5-day forecast AJAX 
     function foreCastCall(city) {
-        var forecastURL = "http://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=97ac3291da095ed4502e29467303d678&units=imperial";
+        var forecastURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=97ac3291da095ed4502e29467303d678&units=imperial";
         $.ajax({
             url: forecastURL,
             method: "GET",
