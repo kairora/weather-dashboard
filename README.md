@@ -3,7 +3,7 @@
 As a traveler who needs to know the weather for a city of interest, or just a curious user interested in the weather in their own city, this weather app will give you the important details.
 
 ## Functionality
-The weather dashboard allows the user to see the current weather for the city the user inputs.  
+The weather dashboard uses the weather API's from https://openweathermap.org/api to allow various functionality.  First, the user can input a city name and click the search button to see the current weather for the city they input.  
 
 ![Scheduler-Date Photo](/Assets/search.PNG)
 
