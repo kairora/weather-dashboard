@@ -24,6 +24,7 @@ $(document).ready(function () {
     $("#cities").on("click", "li", function (event) {
         event.preventDefault();
         inputCity($(this).text());
+        foreCastCall($(this).text());
         // foreCastCall($(this).text());
         // // console.log($(this).text());
 
@@ -178,13 +179,7 @@ $(document).ready(function () {
         var lastCity = cityArr[cityArr.length - 1];
         // append date
         
-        // $(".future").append(forecastSect.append(localStorage.getItem("foreDates"), $("<br>")));
-        // // append icon
-        // $(".future").append(forecastSect.append(localStorage.getItem("foreIcons"), $("<br>")));
-        // // append Temp
-        // $(".future").append(forecastSect.append(localStorage.getItem("foreTemps"), $("<br>")));
-        // // append Humidity
-        // $(".future").append(forecastSect.append(localStorage.getItem("foreHums")));
+        
 
 
     }
@@ -234,6 +229,7 @@ $(document).ready(function () {
     } else {
         $(".cSpan").text("UV Index: N/A")
     }
+    foreCastCall(localStorage.getItem("NowCity"));
 
 
 
