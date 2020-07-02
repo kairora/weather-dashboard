@@ -29,6 +29,13 @@ li:hover {
 
 The dashboard is also able to display not only the current weather of a city, but also that city's 5-day forecast.  In the forecast, the user can view the dates, a weather icon, and the temperature and humidity for those five days.
 
+## Future Enhancements:
+
+I plan to add in the following features: 
+1. Add more CSS to improve the overall UI aesthetic
+2. Prevent usercases for inputting characters other than the text for a city name.  
+3. Hide null or empty contents on the starting load up.
+
 ![Scheduler-Date Photo](/Assets/forecast.PNG)
 
 ### Link to the deployed app
