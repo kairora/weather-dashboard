@@ -25,7 +25,7 @@ li:hover {
 });
 ```
 
-![Scheduler-Date Photo](/Assets/hover.PNG)
+![Scheduler-Date Photo](/Assets/Hover.PNG)
 
 The dashboard is also able to display not only the current weather of a city, but also that city's 5-day forecast.  In the forecast, the user can view the dates, a weather icon, and the temperature and humidity for those five days.
 
